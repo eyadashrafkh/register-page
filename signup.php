@@ -2,44 +2,9 @@
 
     session_start();
 
-    $sqluser = "user";
-    $sqlpassword = "password";
-
-    /*
-    Replace user and password above with your sql server user and password.
-    if you have not created an user, run sql server in shell as root user and enter:
-    
-    CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
-
-    GRANT ALL PRIVILEGES ON *.* TO 'user'@'localhost';
-
-    FLUSH PRIVILEGES;
-    
-    You can replace user and password with your desired username and password.
-    */
-
-    $sqldatabase = "login";
-
-    /*
-    for this page to work you have to create a database named login and a table named list in your mysql server.
-    To do this, enter following in your mysql server:
-
-    CREATE DATABASE login;
-
-    USE login;
-
-    CREATE TABLE list(
-        id int not null auto_increment,
-        user_name varchar(255) not null,
-        first_name varchar(255) not null,
-        last_name varchar(255) not null,
-        email varchar(255) not null,
-        password varchar(255) not null,
-        PRIMARY KEY (id)
-    );
-
-    keep 'login' and 'list' and all field names in lowercase, otherwise, it won't work.
-    */
+    $sqluser = "iyad";
+    $sqlpassword = "engeyad5amisg3fr";
+    $sqldatabase = "registration";
 
     $post = $_SERVER['REQUEST_METHOD']=='POST';
 
@@ -54,6 +19,7 @@
         ) $empty_fields = true;
 
         else {
+            $empty_fields = false;
             $unmatch = preg_match('/^[A-Za-z][A-Za-z0-9_]{3,}$/', $_POST['uname']);
             $fnmatch = preg_match('/^[A-Za-z]+$/', $_POST['fname']);
             $lnmatch = preg_match('/^[A-Za-z]+$/', $_POST['lname']);
@@ -74,16 +40,17 @@
                 $st->execute(array($_POST['email']));
                 $email_err = $st->fetch() != null;
                 if(!$uname_err&&!$email_err) {
+                    $hashpass = md5($_POST['pass']);
                     $stmt = 'INSERT INTO list(user_name,first_name,last_name,email,password) VALUES (?,?,?,?,?)';
                     $pdo->prepare($stmt)->execute(array(
                         $_POST['uname'],
                         $_POST['fname'],
                         $_POST['lname'],
                         $_POST['email'],
-                        $_POST['pass']
+                        $hashpass
                     ));
                     $_SESSION["uname"] = $_POST["uname"];
-                    $_SESSION["pass"] = $_POST["pass"];
+                    $_SESSION["pass"] = $hashpass;
                     $_SESSION["fname"] = $_POST["fname"];
                     header("Location:success.php");
                     exit;
@@ -96,80 +63,54 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<style type="text/css">
-    body {
-        margin:0px;
-        padding:0px;
-        font-family: sans-serif;
-        font-size:.9em;
-    }
-    div {
-        top:50%;
-        left:50%;
-        transform: translate(-50%,-50%);
-        -ms-transform: translate(-50%,-50%);
-        -moz-transform: translate(-50%,-50%);
-        -webkit-transform: translate(-50%,-50%);
-        position:absolute;
-        width:350px;
-        background:#eee;
-        padding:10px 20px;
-        border-radius: 2px;
-        box-shadow:0px 0px 10px #aaa;
-        box-sizing:border-box;
-    }
-    input {
-        display: inline-block;
-        border: none;
-        width:100%;
-        border-radius:2px;
-        margin:5px 0px;
-        padding:7px;
-        box-sizing: border-box;
-        box-shadow: 0px 0px 2px #ccc;
-    }
-    #submit {
-        border:none;
-        background-color: blue;
-        color:white;
-        font-size:1em;
-        box-shadow: 0px 0px 3px #777;
-        padding:10px 0px;
-    }
-    span {
-        color:red;
-        font-size: 0.75em;
-    }
-    p {
-        text-align: center;
-        font-size: 1.75em;
-    }
-    a {
-        text-decoration: none;
-        color:blue;
-        font-weight: bold;
-    }
-</style>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head> 
 <body>
 <div>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
     <p>SignUp</p>
     <?php
-    echo 'Username<br><input type="text" name="uname" value="'.$_POST['uname'].'" placeholder="Username"><br>';
+    if (isset($_POST['submit'])){
+      $uname = isset($_POST['uname']);             
+      $fname = isset($_POST['fname']);             
+      $lname = isset($_POST['lname']); 
+      $email = isset($_POST['email']);                       
+    } else {
+        $uname = '';          
+        $fname = '';
+        $lname = '';
+        $email = '';                        
+    }
+    echo 'Username<br><input type="text" name="uname" value="'.$uname.'" placeholder="Username"><br>';
     if($post&&!$empty_fields&&!$unmatch) echo '<span>Username can contain alphabet letters, numbers and underscore(_), but must begin with a letter. It must be at least 4 character long.<br></span>';
     if(!empty($uname_err)&&$uname_err) echo '<span>Username taken. Try another username.</span>';
-    echo '<br>Name<br><input type="text" name="fname" value="'.$_POST['fname'].'" placeholder="First Name"><br>';
-    echo '<input type="text" name="lname" value="'.$_POST['lname'].'" placeholder="Last Name"><br>';
+    echo '<br>Name<br><input type="text" name="fname" value="'.$fname = ''.'" placeholder="First Name"><br>';
+    echo '<input type="text" name="lname" value="'.$lname.'" placeholder="Last Name"><br>';
     if($post&&!$empty_fields&&!($lnmatch&&$fnmatch)) echo '<span>Name can only contain alphabet letters.<br></span>';
-    echo '<br>E-mail<br><input type="text" name="email" value="'.$_POST['email'].'" placeholder="email@example.com"><br>';
+    echo '<br>E-mail<br><input type="text" name="email" value="'.$email.'" placeholder="email@example.com"><br>';
     if(!empty($email_err)&&$email_err) echo '<span>Email already registered. Enter another email.</span>';
     if($post&&!$empty_fields&&!$emmatch) echo '<span>Email must be of format example@site.domain<br></span>';
     echo '<br>Password<br><input type="password" name="pass" placeholder="Password"><br>';
     echo '<input type="password" name="repass" placeholder="Retype password">';
     if($post&&!$empty_fields&&!$pmatch) echo '<span>Password must be at least 5 character long</span>';
     if($post&&!$empty_fields&&$pmatch&&!$peq) echo '<span>Password don\'t match</span><br>';
-    if($post &&$empty_fields) echo "<br><span>Please fill all the fields completely.</span><br>";
+    if($post &&$empty_fields) {
+        $empty_field = [];
+
+        foreach ($_POST as $key => $value) {
+            if (empty($value)) {
+                $empty_field[] = $key;
+                // echo "<pre>";
+                // print_r($_POST);
+                // echo "</pre>";
+            }
+        }
+
+        echo "<br><span>Please fill all the fields completely. The following fields are empty: ";
+        echo implode(', ', $empty_field);
+        echo ".</span><br>";
+        // echo "<br><span>Please fill all the fields completely.</span><br>";
+    }
     ?>
     <br>
     <input type="submit" id="submit" value="SignUp"><br><br>
