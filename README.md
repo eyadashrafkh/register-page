@@ -57,13 +57,12 @@ Also, these scripts use prepared SQL statements preventing SQL injection. The **
 ## Screenshots
 Following are few screenshots of these pages.
 
-![screenshot](screenshots/img1.png)
-![screenshot](screenshots/img2.png)
-![screenshot](screenshots/img3.png)
-![screenshot](screenshots/img4.png)
-![screenshot](screenshots/img5.png)
-![screenshot](screenshots/img6.png)
-![screenshot](screenshots/img7.png)
+![screenshot](screenshots/signin1.png)
+![screenshot](screenshots/signup1.png)
+![screenshot](screenshots/success.png)
+![screenshot](screenshots/signin2.png)
+![screenshot](screenshots/signup2.png)
+![screenshot](screenshots/success.png)
 ___
 The code is not clean, but good enough (I guess). :stuck_out_tongue_closed_eyes:
 
