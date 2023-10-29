@@ -56,6 +56,15 @@ The directory contains 3 PHP files and a CSS file:
 
 Also, these scripts use prepared SQL statements preventing SQL injection.
 
+## Adjustment main repo forked
+Some files where changes mainly in the signup.php file and these changes:
+* Displays which field is empty if any.
+* Encryption for the password using MD5.
+* Initializing the variables in the HTML forms so they don't give warning if not.
+
+Other adjustment in the css:
+* Added a background image.
+* Created a CSS file and linked all the php files to it.
 
 ## Screenshots
 Following are few screenshots of these pages.
