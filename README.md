@@ -40,10 +40,11 @@ CREATE TABLE list (
 ```
 
 ## About
-The directory **src** contains 3 PHP files:
+The directory contains 3 PHP files and a CSS file:
 * signup.php
 * login.php
 * success.php
+* styles.css
 
 **signup.php** returns a **html** form to user and on submit, validates it using regular expressions. It then connects to **mysql** server and checks for duplicate username or email and finally inserts entry for new user in database, starts a new session by initializing session variables and takes to **success.php**.
 
@@ -51,7 +52,9 @@ The directory **src** contains 3 PHP files:
 
 **success.php** greets user and retains user session started in **signup.php** or **login.php**. If user clicks logout, current session is destroyed and user is taken to **login.php**. If session variables are not set or username in session variables is not in database or password doesn't match, this page redirects to **login.php** and so, this page can't be accessed without logging in with valid details.
 
-Also, these scripts use prepared SQL statements preventing SQL injection. The **HTML** forms in these pages also contain some basic **CSS** style.
+**styles.css**  Contain some basic **CSS** style to the **HTML** forms in these pages and background.
+
+Also, these scripts use prepared SQL statements preventing SQL injection.
 
 
 ## Screenshots
@@ -66,6 +69,11 @@ Following are few screenshots of these pages.
 ___
 The code is not clean, but good enough (I guess). :stuck_out_tongue_closed_eyes:
 
+(Fork edit)The code is clean (I guess). :stuck_out_tongue_closed_eyes:
+
 You can add it to your server or website, and do anything you want, like improve style or appearance, improve code add new features etc. :+1:
 
 Thanks ~ @deadfrominside :smile:
+
+## WARNING
+DONT TRY THIS AT HOME ALONE AS IT MIGHT CAUSE MIGRAINE OR BRAIN CANCER 
